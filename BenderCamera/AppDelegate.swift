@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  BenderCamera
 //
-//  Created by a.belkov on 20/10/2017.
+//  Created by bestK1ng on 20/10/2017.
 //  Copyright © 2017 bestK1ng. All rights reserved.
 //
 
