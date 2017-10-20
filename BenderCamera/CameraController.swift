@@ -11,9 +11,11 @@ import AVFoundation
 
 class CameraController: UIViewController {
 
+    @IBOutlet weak var imageView: UIImageView!
+    
     var session: AVCaptureSession?
     var input: AVCaptureDeviceInput?
-    var output: AVCapturePhotoOutput?
+    var output: AVCaptureStillImageOutput?
     var previewLayer: AVCaptureVideoPreviewLayer?
     
     override func viewDidLoad() {
@@ -21,7 +23,8 @@ class CameraController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         ///
-        //capturePhoto()
+        setupSession()
+        capturePhoto()
     }
 
     override func didReceiveMemoryWarning() {
@@ -29,7 +32,6 @@ class CameraController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    /*
     func setupSession() {
         session = AVCaptureSession()
         session?.sessionPreset = AVCaptureSession.Preset.photo
@@ -38,7 +40,8 @@ class CameraController: UIViewController {
         
         do { input = try AVCaptureDeviceInput(device: camera!) } catch { return }
         
-        output = AVCapturePhotoOutput()
+        output = AVCaptureStillImageOutput()
+        output?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
         
         guard (session?.canAddInput(input!))! && (session?.canAddOutput(output!))! else { return }
         
@@ -54,14 +57,10 @@ class CameraController: UIViewController {
         
         session?.startRunning()
     }
-    */
     
-    /*
     func capturePhoto() {
         guard let connection = output?.connection(with: AVMediaType.video) else { return }
         connection.videoOrientation = .portrait
-        
-        output?.capturePhoto(with: AVCapturePhotoSettings(), delegate: <#T##AVCapturePhotoCaptureDelegate#>)
         
         output?.captureStillImageAsynchronously(from: connection) { (sampleBuffer, error) in
             guard sampleBuffer != nil && error == nil else { return }
@@ -70,9 +69,8 @@ class CameraController: UIViewController {
             guard let image = UIImage(data: imageData!) else { return }
             
             // Do stuff with image
-            
+            self.imageView.image = image
         }
     }
-    */
 }
 
