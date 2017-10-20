@@ -16,6 +16,7 @@ class CameraController: UIViewController {
     
     // Timer
     var timer = Timer()
+    var indicatorTime = Timer()
     
     // AVFoundation
     var session: AVCaptureSession?
@@ -28,7 +29,7 @@ class CameraController: UIViewController {
         
         setupSession()
         startTimerWithTimeInterval(10) // take photo every 10 seconds
-        //startIndicatorAnimation()
+        startIndicatorAnimation()
     }
 
     func startTimerWithTimeInterval(_ timeInterval: Double) {
@@ -83,17 +84,15 @@ class CameraController: UIViewController {
     
     func startIndicatorAnimation() {
         
-        let blinkDuration = 5.0
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.animateIndicator), userInfo: nil, repeats: true)
+    }
+    
+    @objc func animateIndicator() {
         
+        let blinkDuration = 0.3
         UIView.animate(withDuration: blinkDuration, animations: {
-            self.indicator.isHidden = false
-        }) { (completion) in
-            UIView.animate(withDuration: blinkDuration, animations: {
-                self.indicator.isHidden = true
-            }, completion: { (completion) in
-                self.startIndicatorAnimation()
-            })
-        }
+            self.indicator.isHidden = !self.indicator.isHidden
+        })
     }
     
     func stopIndicatorAnimation() {
