@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import Alamofire
 
 class CameraController: UIViewController {
 
@@ -75,10 +76,15 @@ class CameraController: UIViewController {
             guard sampleBuffer != nil && error == nil else { return }
             
             let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer!)
-            guard let image = UIImage(data: imageData!) else { return }
+            guard var image = UIImage(data: imageData!) else { return }
+            
+            image = self.rotate(image: image)
             
             // Show image
-            self.imageView.image = self.rotate(image: image)
+            self.imageView.image = image
+            
+            // Send image
+            self.sendImage(image)
         }
     }
     
@@ -99,6 +105,19 @@ class CameraController: UIViewController {
         self.view.layer.removeAllAnimations()
     }
     
+    // MARK: Server
+    
+    func sendImage(_ image: UIImage) {
+        
+        let imageData = UIImageJPEGRepresentation(image, 0.6)!
+        let parameters = ["token": "23317bcdde58306bfb3e321fb2803fea",
+                          "image": imageData] as [String : Any]
+        
+        Alamofire.request("http://77.244.216.138:3001/upload", method: HTTPMethod.post, parameters: parameters, encoding: URLEncoding.httpBody, headers: nil).response { (response) in
+            print(response)
+        }
+    }
+ 
     // MARK: Heplers
     
     func autofocus() {

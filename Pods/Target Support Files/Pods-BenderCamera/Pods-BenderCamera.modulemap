@@ -1,0 +1,6 @@
+framework module Pods_BenderCamera {
+  umbrella header "Pods-BenderCamera-umbrella.h"
+
+  export *
+  module * { export * }
+}
